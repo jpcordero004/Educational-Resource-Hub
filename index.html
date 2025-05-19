@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Educational Resource Hub</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #2c3e50;
+      --navbar-bg: #2c3e50;
+      --link-hover-bg: #ecf0f1;
+      --link-hover-color: #2c3e50;
+      --focus-outline: #3498db;
+      --transition-speed: 0.3s;
+    }
+
+    .dark-mode {
+      --bg-color: #2c3e50;
+      --text-color: #ecf0f1;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      scroll-behavior: smooth;
+      line-height: 1.7;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+      padding-top: 60px; /* navbar height */
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: none;
+      outline-offset: 2px;
+      transition: color var(--transition-speed);
+    }
+    a:hover,
+    a:focus {
+      color: var(--link-hover-color);
+      background-color: var(--link-hover-bg);
+      outline: none;
+      border-radius: 4px;
+    }
+    a:focus-visible {
+      outline: 3px solid var(--focus-outline);
+      outline-offset: 2px;
+    }
+
+    h2, h3 {
+      color: var(--text-color);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      line-height: 1.25;
+    }
+
+    ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    p, li {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      max-width: 600px;
+    }
+
+    /* Navbar */
+    header[role="banner"] {
+      background-color: var(--navbar-bg);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 10000;
+      box-shadow: none;
+      transition: box-shadow var(--transition-speed) ease, background-color var(--transition-speed) ease;
+      display: flex;
+      justify-content: center;
+      padding: 0.5rem 1rem;
+      user-select: none;
+    }
+    header.scrolled {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    nav[role="navigation"] {
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .navbar-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .navbar-links a {
+      color: #ecf0f1;
+      padding: 0.75rem 1.25rem;
+      font-weight: 600;
+      border-radius: 4px;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+      user-select: none;
+    }
+
+    .navbar-links a:hover,
+    .navbar-links a:focus-visible {
+      background-color: var(--link-hover-bg);
+      color: var(--link-hover-color);
+      outline-offset: 2px;
+      outline: 3px solid var(--focus-outline);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 35px;
+      height: 28px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-left: 0.5rem;
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 10001;
+      user-select: none;
+    }
+
+    .hamburger div {
+      width: 35px;
+      height: 4px;
+      background-color: #ecf0f1;
+      border-radius: 2px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: 1px;
+      will-change: transform, opacity;
+    }
+
+    .hamburger.active div:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .hamburger.active div:nth-child(2) {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+
+    .hamburger.active div:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* Bounce animation on click */
+    .hamburger:active div:nth-child(1),
+    .hamburger:active div:nth-child(3) {
+      animation: bounce 0.3s ease forwards;
+    }
+
+    @keyframes bounce {
+      0% { transform: rotate(0) translate(0,0); }
+      50% { transform: rotate(10deg) translate(2px, 2px); }
+      100% { transform: rotate(0) translate(0,0); }
+    }
+
+    /* Sections */
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem 3rem;
+    }
+
+    section {
+      padding: 4rem 1rem;
+      min-height: 100vh;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #home {
+      background-color: #fefefe;
+    }
+
+    #Categories-section {
+      background-color: #f0f8ff;
+    }
+
+    #about {
+      background-color: #fef6f0;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      header[role="banner"] {
+        justify-content: flex-start;
+        padding: 0.5rem 0.5rem 0.5rem 3.75rem;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .navbar-links {
+        flex-direction: column;
+        background-color: var(--navbar-bg);
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        padding: 1rem 0;
+        gap: 0;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 9999;
+      }
+
+      .navbar-links.show {
+        display: flex;
+        opacity: 1;
+      }
+
+      .navbar-links a {
+        padding: 1rem;
+        font-size: 1.2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        width: 100%;
+        text-align: center;
+      }
+
+      section {
+        padding: 3rem 1rem;
+      }
+
+      h2 {
+        font-size: 1.75rem;
+      }
+
+      h3 {
+        font-size: 1.25rem;
+      }
+    }
+
+    /* Focus outline for keyboard users */
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid var(--focus-outline);
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <header role="banner" aria-label="Primary navigation">
+    <button
+      class="hamburger"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+      id="hamburger"
+    >
+      <div></div>
+      <div></div>
+      <div></div>
+    </button>
+
+    <nav role="navigation" id="primary-navigation" class="navbar-links">
+      <a href="#home" tabindex="0">Home</a>
+      <a href="#Categories-section" tabindex="0">Categories</a>
+      <a href="#about" tabindex="0">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" tabindex="-1" aria-labelledby="home-heading">
+      <div id="introduction">
+        <h2 id="home-heading">Welcome to the Educational Resource Hub</h2>
+        <p>This hub is your go-to destination for curated educational materials, organized by category and purpose. Whether you're a student, teacher, or lifelong learner, we've got something for you.</p>
+      </div>
+
+      <div id="featured" aria-label="Featured Resources">
+        <h3>Featured Resources</h3>
+        <ul>
+          <li>Interactive Math Tools</li>
+          <li>Science Experiment Videos</li>
+          <li>Language Learning Flashcards</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="Categories-section" tabindex="-1" aria-labelledby="categories-heading">
+      <div id="categories">
+        <h2 id="categories-heading">Resource Categories</h2>
+        <ul>
+          <li>Mathematics</li>
+          <li>Science</li>
+          <li>History</li>
+          <li>Languages</li>
+          <li>Technology</li>
+        </ul>
+      </div>
+
+      <div id="resources" aria-label="Sample Resources">
+        <h3>Sample Resources</h3>
+        <ul>
+          <li><strong>Math:</strong> Khan Academy Algebra Playlist</li>
+          <li><strong>Science:</strong> NASA Kids' Club</li>
+          <li><strong>History:</strong> CrashCourse World History</li>
+          <li><strong>Languages:</strong> Duolingo Beginner Spanish</li>
+          <li><strong>Technology:</strong> Codecademy HTML/CSS Course</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="about" tabindex="-1" aria-labelledby="mission-heading">
+      <div id="mission">
+        <h2 id="mission-heading">Our Mission</h2>
+        <p>Our mission is to make high-quality educational content accessible to everyone. We believe in lifelong learning and strive to empower individuals with the tools they need to grow intellectually and professionally.</p>
+      </div>
+
+      <div id="contact" aria-label="Contact Information">
+        <h3>Contact Us</h3>
+        <address>
+          <p>Email: <a>jpcordero004@gmail.com</a></p>
+          <p>Phone: <a>+63 921 818 3806</a></p>
+          <p>Address: 123 Learning Lane, Education City, PH</p>
+        </address>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Reveal sections on scroll with IntersectionObserver
+    const sections = document.querySelectorAll("main section");
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    sections.forEach(section => observer.observe(section));
+
+    // Hamburger toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('primary-navigation');
+
+    hamburger.addEventListener("click", () => {
+      const expanded = hamburger.getAttribute("aria-expanded") === "true";
+      hamburger.setAttribute("aria-expanded", !expanded);
+      hamburger.classList.toggle("active");
+      navLinks.classList.toggle("show");
+    });
+
+    // Close menu on link click (mobile)
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (hamburger.classList.contains('active')) {
+          hamburger.click();
+        }
+      });
+    });
+
+    // Add shadow on scroll
+    const header = document.querySelector('header[role="banner"]');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 5) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Smooth scroll with offset for fixed navbar
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          e.preventDefault();
+          const offsetPosition = targetElement.offsetTop - header.offsetHeight;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+          // Set focus for accessibility
+          targetElement.setAttribute('tabindex', '-1');
+          targetElement.focus({ preventScroll: true });
+
+          // Close mobile menu if open
+          if (hamburger.classList.contains('active')) {
+            hamburger.click();
+          }
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
